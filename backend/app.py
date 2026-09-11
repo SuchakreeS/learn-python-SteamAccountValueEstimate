@@ -3,6 +3,7 @@ from steam_auth import get_login_url, verify_login
 from dotenv import load_dotenv
 from steam_api import get_owned_games
 from itad_api import lookup_itad_ids, get_prices, parse_price
+from library import build_library
 import os
 
 
@@ -70,6 +71,15 @@ def test_prices():
     parsed = [parse_price(entry) for entry in raw_prices]
     return {"parsed": parsed}
 
+@app.route('/api/test-library')
+def test_library():
+    steamid = session.get("steamid")
+    steam_key = os.environ["STEAM_WEB_API_KEY"]
+    itad_key = os.environ["ITAD_API_KEY"]
+
+    library = build_library(steamid, steam_key, itad_key)
+
+    return {"GameCount": len(library), "Sample": library[:5]}
 
 if __name__ == "__main__":
     app.run(debug=True, port = 5000)
