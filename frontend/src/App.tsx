@@ -2,10 +2,12 @@ import { useEffect } from "react"
 import { useAuthStore } from "./store/useAuthStore"
 import { useGamesStore } from "./store/useGamesStore"
 import { login } from "./api/auth"
+import { priceTotals } from "./utils/priceTotals"
 
 function App() {
   const { loggedIn, checking, checkAuth } = useAuthStore()
   const { games, gameCount, loading, error, fetchGames } = useGamesStore()
+  const {totalMin, totalMax} = priceTotals(games)
 
   useEffect(() => {
     checkAuth()
@@ -35,6 +37,7 @@ if(error){
   return (
     <div>
       <h1>Your Library ({gameCount} games)</h1>
+      <h2>Estimated Value: ${totalMin.toFixed(2)} - ${totalMax.toFixed(2)}</h2>
       <ul>
         {games.map((game) => (
           <li key={game.appId}>
