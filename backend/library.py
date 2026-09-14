@@ -1,7 +1,12 @@
 from steam_api import get_owned_games
 from itad_api import lookup_itad_ids, get_prices, parse_price
+from db import get_cached_library, save_library
 
 def build_library(steamid: str, steam_key: str, itad_key: str) -> list[dict]:
+    cahced = get_cached_library(steamid)
+    if cahced is not None:
+        return cahced
+
     games = get_owned_games(steamid, steam_key)
 
     if games is None:
@@ -25,4 +30,5 @@ def build_library(steamid: str, steam_key: str, itad_key: str) -> list[dict]:
             "max": price["max"] if price else None
         })
 
+    save_library(steamid, res)
     return res

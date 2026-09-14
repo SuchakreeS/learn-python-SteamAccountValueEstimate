@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from steam_api import get_owned_games
 from itad_api import lookup_itad_ids, get_prices, parse_price
 from library import build_library
+from db import init_db
 import os
 
 
@@ -11,6 +12,8 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ["FLASK_SECRET_KEY"]
+
+init_db()
 
 @app.route('/api/health')
 def health():
