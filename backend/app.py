@@ -5,12 +5,15 @@ from dotenv import load_dotenv
 from library import build_library
 from db import init_db
 import os
+from flask_cors import CORS
 
 
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ["FLASK_SECRET_KEY"]
+
+CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
 init_db()
 
@@ -38,9 +41,9 @@ def me():
     steamid = session.get("steamid")
 
     if steamid is None:
-        return {"logged in" : False}, 401
+        return {"logged_in": False}, 401
 
-    return {"logged in" : True, "steamid" : steamid}
+    return {"logged_in": True, "steamid": steamid}
 
 @app.route('/api/games')
 def games():
@@ -57,7 +60,7 @@ def games():
     if library is None:
         return{"error": "game details are private"}, 403
 
-    return {"Game count": len(library), "Games": library}
+    return {"game_count": len(library), "games": library}
 
 
 # Test Route
