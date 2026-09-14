@@ -1,8 +1,7 @@
 from flask import Flask, redirect, request, session
 from steam_auth import get_login_url, verify_login
 from dotenv import load_dotenv
-from steam_api import get_owned_games
-from itad_api import lookup_itad_ids, get_prices, parse_price
+# from itad_api import lookup_itad_ids, get_prices, parse_price
 from library import build_library
 from db import init_db
 import os
@@ -50,39 +49,41 @@ def games():
     if steamid is None:
         return {"error": "not logged in"}, 401
 
-    api_key = os.environ["STEAM_WEB_API_KEY"]
-    games = get_owned_games(steamid, api_key)
-
-    if games is None :
-        return {"error" : "game details are private"}, 403
-
-    return {
-        "game_count": len(games), "games" : games
-    }
-
-@app.route('/api/test-itad')
-def test_itad():
-    api_key = os.environ["ITAD_API_KEY"]
-    res = lookup_itad_ids([440, 570], api_key)
-    return res
-
-@app.route('/api/test-prices')
-def test_prices():
-    api_key = os.environ['ITAD_API_KEY']
-    itad_ids = ["018d937e-fde4-72ff-a7af-45e4955a8dd6", "018d937f-19a5-7057-bb6d-314d586e6dbc"]
-    raw_prices = get_prices(itad_ids, api_key)
-    parsed = [parse_price(entry) for entry in raw_prices]
-    return {"parsed": parsed}
-
-@app.route('/api/test-library')
-def test_library():
-    steamid = session.get("steamid")
     steam_key = os.environ["STEAM_WEB_API_KEY"]
     itad_key = os.environ["ITAD_API_KEY"]
 
     library = build_library(steamid, steam_key, itad_key)
 
-    return {"GameCount": len(library), "Sample": library[:5]}
+    if library is None:
+        return{"error": "game details are private"}, 403
+
+    return {"Game count": len(library), "Games": library}
+
+
+# Test Route
+# @app.route('/api/test-itad')
+# def test_itad():
+#     api_key = os.environ["ITAD_API_KEY"]
+#     res = lookup_itad_ids([440, 570], api_key)
+#     return res
+
+# @app.route('/api/test-prices')
+# def test_prices():
+#     api_key = os.environ['ITAD_API_KEY']
+#     itad_ids = ["018d937e-fde4-72ff-a7af-45e4955a8dd6", "018d937f-19a5-7057-bb6d-314d586e6dbc"]
+#     raw_prices = get_prices(itad_ids, api_key)
+#     parsed = [parse_price(entry) for entry in raw_prices]
+#     return {"parsed": parsed}
+
+# @app.route('/api/test-library')
+# def test_library():
+#     steamid = session.get("steamid")
+#     steam_key = os.environ["STEAM_WEB_API_KEY"]
+#     itad_key = os.environ["ITAD_API_KEY"]
+
+#     library = build_library(steamid, steam_key, itad_key)
+
+#     return {"GameCount": len(library), "Sample": library[:5]}
 
 if __name__ == "__main__":
     app.run(debug=True, port = 5000)
