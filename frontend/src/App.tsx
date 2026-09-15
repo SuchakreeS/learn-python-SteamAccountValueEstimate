@@ -3,6 +3,7 @@ import { useAuthStore } from "./store/useAuthStore"
 import { useGamesStore } from "./store/useGamesStore"
 import Landing from "./pages/Landing"
 import Home from "./pages/Home"
+import Loading from "./components/Loading"
 
 function App() {
   const { loggedIn, checking, checkAuth } = useAuthStore()
@@ -19,14 +20,14 @@ function App() {
   }, [loggedIn])
 
   if (checking){
-    return <p>Checking login ....</p>
+    return <Loading message="Checking Login Status..."/>
   }
   if (!loggedIn){
     return <Landing />
   }
 
   if(loading){
-    return <p>Loading you library</p>
+    return <Loading message="Checking Your game library"/>
   }
 
   if(error){
