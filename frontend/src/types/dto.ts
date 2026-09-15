@@ -13,4 +13,6 @@ export interface GameResponse {
 export interface MeDto {
     logged_in : boolean;
     steamid? : string;
+    steam_name? : string;
+    avatar_url? : string;
 }

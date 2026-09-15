@@ -21,6 +21,8 @@ export function mapGameResponse(dto: GameResponse): GamesSummary{
 export function mapMe(dto: MeDto): AuthStatus{
     return{
         loggedIn : dto.logged_in,
-        steamId : dto.steamid
+        steamId : dto.steamid,
+        steamName : dto.steam_name,
+        avatarUrl : dto.avatar_url
     }
 }
