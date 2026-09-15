@@ -1,1 +1,16 @@
-@import "tailwindcss"
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Titan+One&family=Baloo+2:wght@400;600;700;800&display=swap');
+
+@theme {
+    --color-bg: #fef6e4;
+    --color-card: #ffffff;
+    --color-border: #1a1a1a;
+    --color-text-primary: #5c5c5c;
+    --color-accent: #ff2e88;
+    --color-accent2: #ffd60a;
+    --color-accent3: #00b4d8;
+    --color-highlight: #ff3b30;
+
+    --font-display: "Titan One", "Arial Black", sans-serif;
+    --font-body: "Baloo 2", sans-serif;
+}
