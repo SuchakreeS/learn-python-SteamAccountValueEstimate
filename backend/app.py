@@ -1,5 +1,6 @@
 from flask import Flask, redirect, request, session
 from steam_auth import get_login_url, verify_login
+from steam_api import get_steam_name, get_profile_pic
 from dotenv import load_dotenv
 # from itad_api import lookup_itad_ids, get_prices, parse_price
 from library import build_library
@@ -43,7 +44,16 @@ def me():
     if steamid is None:
         return {"logged_in": False}, 401
 
-    return {"logged_in": True, "steamid": steamid}
+    steam_key = os.environ["STEAM_WEB_API_KEY"]
+    steam_name = get_steam_name(steamid, steam_key)
+    avatar_url = get_profile_pic(steamid, steam_key)
+
+    return {
+        "logged_in": True,
+        "steamid": steamid,
+        "steam_name": steam_name,
+        "avatar_url": avatar_url
+    }
 
 @app.route('/api/games')
 def games():
