@@ -4,6 +4,9 @@ import { useGamesStore } from "./store/useGamesStore"
 import Landing from "./pages/Landing"
 import Home from "./pages/Home"
 import Loading from "./components/Loading"
+import { Route, Routes } from "react-router"
+import Chart from "./pages/Chart"
+import Profile from "./pages/Profile"
 
 function App() {
   const { loggedIn, checking, checkAuth } = useAuthStore()
@@ -34,7 +37,13 @@ function App() {
     return <p>{error}</p>
   }
 
-  return <Home />
+  return (
+    <Routes>
+      <Route path="/" element={<Home/>}/>
+      <Route path="/chart" element={<Chart/>}/>
+      <Route path="/profile" element={<Profile/>}/>
+    </Routes>
+  )
 }
 
 export default App
