@@ -16,3 +16,13 @@ export interface MeDto {
     steam_name? : string;
     avatar_url? : string;
 }
+
+export interface GameGenreDto {
+    appid: number;
+    genres: string [];
+    categories: string []
+}
+
+export interface GenresResponseDto {
+    genres: GameGenreDto[]
+}

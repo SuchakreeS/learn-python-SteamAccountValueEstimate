@@ -1,6 +1,7 @@
 from flask import Flask, redirect, request, session
 from steam_auth import get_login_url, verify_login
 from steam_api import get_steam_name, get_profile_pic
+from genre_library import get_genres_for_lib
 from dotenv import load_dotenv
 # from itad_api import lookup_itad_ids, get_prices, parse_price
 from library import build_library
@@ -71,6 +72,26 @@ def games():
         return{"error": "game details are private"}, 403
 
     return {"game_count": len(library), "games": library}
+
+@app.route('/api/genres')
+def genres():
+    steamid = session.get("steamid")
+
+    if steamid is None:
+        return {"error": "not logged in"}, 401
+
+    steam_key = os.environ["STEAM_WEB_API_KEY"]
+    itad_key = os.environ["ITAD_API_KEY"]
+
+    lib = build_library(steamid, steam_key, itad_key)
+
+    if lib is None:
+        return {"error": "Game details are private"}, 403
+
+    genre_data = get_genres_for_lib(lib)
+
+    return {"genres": genre_data}
+
 
 
 # Test Route

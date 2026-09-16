@@ -1,4 +1,5 @@
 import sqlite3
+import json
 from datetime import datetime, timedelta, timezone
 
 DB_PATH = "cache.db"
@@ -22,6 +23,12 @@ def init_db():
         max_price REAL,
         updated_at TEXT NOT NULL,
         PRIMARY KEY(steamid,appid))
+""")
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS game_genres(
+    appid INTEGER PRIMARY KEY,
+    genres TEXT,
+    categories TEXT)
 """)
     conn.commit()
     conn.close()
@@ -61,6 +68,35 @@ def save_library(steamid: str, games: list[dict]):
                 max_price = excluded.max_price,
                 updated_at = excluded.updated_at
         """,(steamid, game["appid"], game["name"], game["min"], game["max"], now))
+
+    conn.commit()
+    conn.close()
+
+def get_cached_genre(appid : int) -> dict | None:
+    conn = get_connection()
+    row = conn.execute(
+    "SELECT * FROM game_genres WHERE appid=?", (appid,)
+    ).fetchone()
+    conn.close()
+
+    if row is None:
+        return None
+
+    return {
+        "genres": json.loads(row["genres"]),
+        "categories": json.loads(row["categories"])
+    }
+
+
+def save_genre(appid: int, genres: list[str], categories: list[str]) :
+    conn = get_connection()
+    conn.execute("""
+    INSERT INTO game_genres(appid, genres, categories)
+    VALUES (?,?,?)
+    ON CONFLICT (appid) DO UPDATE SET
+        genres = excluded.genres,
+        categories = excluded.categories
+    """, (appid, json.dumps(genres), json.dumps(categories)))
 
     conn.commit()
     conn.close()
