@@ -1,8 +1,9 @@
 import { create } from "zustand";
 import { getGames } from "../api/games";
 import type { Game } from "../types/game";
+import { showToast } from "../utils/toast";
 
-interface GamesState{
+interface GamesState {
     games: Game[];
     gameCount: number;
     loading: boolean;
@@ -20,15 +21,17 @@ export const useGamesStore = create<GamesState>()((set) => ({
             loading: true,
             error: null
         })
-            try{
-                const summary = await getGames()
-                set({
-                    games: summary.games, gameCount: summary.gameCount, loading: false
-                })
-            } catch(err) {
-                set({
-                    error: "Failed to load game", loading: false
-                })
-            }
+        try {
+            const summary = await getGames()
+            set({
+                games: summary.games, gameCount: summary.gameCount, loading: false
+            })
+            showToast(`Loaded ${summary.gameCount} games!`)
+        } catch (err) {
+            set({
+                error: "Failed to load game", loading: false
+            })
+            showToast("Failed to load your library")
+        }
     }
 }))
