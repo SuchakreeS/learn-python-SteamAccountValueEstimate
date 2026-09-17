@@ -15,7 +15,10 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.environ["FLASK_SECRET_KEY"]
 
-CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
+FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:5000")
+
+CORS(app, supports_credentials=True, origins=[FRONTEND_URL])
 
 init_db()
 
@@ -25,7 +28,7 @@ def health():
 
 @app.route('/login')
 def login():
-    return_to = "http://localhost:5000/callback"
+    return_to = f"{BACKEND_URL}/callback"
     return redirect(get_login_url(return_to))
 
 @app.route('/callback')
@@ -36,7 +39,7 @@ def callback():
         return {"error" : "login verification failed"}, 401
 
     session["steamid"] = steamid
-    return redirect("http://localhost:5173/")
+    return redirect(FRONTEND_URL)
 
 @app.route('/api/me')
 def me():
