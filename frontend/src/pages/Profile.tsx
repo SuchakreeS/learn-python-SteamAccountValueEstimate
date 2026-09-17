@@ -14,7 +14,7 @@ export default function Profile() {
     const mostExpensive = getMostExpensiveGame(games);
 
     return (
-        <div className="relative h-dvh overflow-hidden bg-bg px-6 pb-28 pt-10">
+        <div className="relative h-dvh overflow-y-auto bg-bg px-6 pb-36 pt-10">
             <ConfettiBg />
             <div className="absolute right-6 top-6 z-20">
                 <LogoutButton />

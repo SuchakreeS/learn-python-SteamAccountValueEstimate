@@ -37,7 +37,7 @@ export default function Chart() {
                     style={{ boxShadow: "6px 6px 0 var(--color-accent2)" }}
                 >
                     <ResponsiveContainer width="100%" height={data.length * 40 + 40}>
-                        <BarChart data={data} layout="vertical" margin={{ left: 20 }}>
+                        <BarChart data={data} layout="vertical" margin={{ left: 20, right: 40 }}>
                             <XAxis type="number" hide />
                             <YAxis
                                 type="category"
