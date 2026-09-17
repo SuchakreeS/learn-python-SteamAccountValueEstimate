@@ -1,6 +1,6 @@
 // pages/Chart.tsx
 import { useEffect, useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell, LabelList } from "recharts";
 import { getGenres } from "../api/genres";
 import { countGenres, countCategories } from "../utils/genreStats";
 import type { GameGenre } from "../types/genre";
@@ -48,6 +48,11 @@ export default function Chart() {
                                 {data.map((_, index) => (
                                     <Cell key={index} fill={BAR_COLORS[index % BAR_COLORS.length]} stroke="var(--color-border)" strokeWidth={2} />
                                 ))}
+                                <LabelList
+                                    dataKey="count"
+                                    position="right"
+                                    style={{ fontFamily: "var(--font-body)", fontWeight: 700, fill: "var(--color-text-primary)" }}
+                                />
                             </Bar>
                         </BarChart>
                     </ResponsiveContainer>
