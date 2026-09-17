@@ -14,6 +14,12 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ["FLASK_SECRET_KEY"]
+IS_PRODUCTION = os.environ.get("RENDER") == "true"
+
+app.config.update(
+    SESSION_COOKIE_SAMESITE="None" if IS_PRODUCTION else "Lax",
+    SESSION_COOKIE_SECURE=IS_PRODUCTION
+)
 
 FRONTEND_URL = os.environ.get("FRONTEND_URL", "http://localhost:5173")
 BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:5000")
