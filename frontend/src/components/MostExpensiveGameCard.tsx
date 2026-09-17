@@ -9,7 +9,7 @@ export default function MostExpensiveGameCard({game}: MostExpensiveGameCardProps
 
     return (
         <div
-            className="w-full max-w-sm overflow-hidden rounded-3xl border-4 border-border bg-card"
+            className="w-full max-w-sm shrink-0 overflow-hidden rounded-3xl border-4 border-border bg-card"
             style={{ boxShadow: "6px 6px 0 var(--color-accent2)" }}
         >
             <img src={headerUrl} alt={game.name} className="w-full border-b-4 border-border" />
