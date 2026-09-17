@@ -1,0 +1,19 @@
+type GameCountBoxProps = {
+    count: number
+}
+
+export default function GameCountBox({ count }: GameCountBoxProps) {
+    return (
+        <div className="rounded-3xl border-4 border-border bg-card px-8 py-6 text-center"
+            style={{ boxShadow: "6px 6px 0 var(--color-accent2)" }}>
+            <span className="font-display text-3xl text-accent"
+                style={{
+                    WebkitTextStroke: "1px var(--color-accent3)",
+                    textShadow: "2px 2px 0 rgba(26, 26, 26, 0.8)",
+                }}>
+                {count}
+            </span>
+            <p className="mt-2 font-body text-lg font-bold text-text-primary">Games</p>
+        </div>
+    )
+}

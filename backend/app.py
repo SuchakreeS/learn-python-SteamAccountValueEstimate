@@ -36,7 +36,7 @@ def callback():
         return {"error" : "login verification failed"}, 401
 
     session["steamid"] = steamid
-    return {"logged_in":True, "steamid" : steamid}
+    return redirect("http://localhost:5173/")
 
 @app.route('/api/me')
 def me():
@@ -91,6 +91,11 @@ def genres():
     genre_data = get_genres_for_lib(lib)
 
     return {"genres": genre_data}
+
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return{"logged_out": True}
 
 
 

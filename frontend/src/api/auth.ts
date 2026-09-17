@@ -12,3 +12,7 @@ export async function getMe(): Promise<AuthStatus> {
 export function login(): void {
     window.location.href = `${API_BASE_URL}/login`
 }
+
+export async function logout(): Promise <void> {
+    await apiClient.post('/logout')
+}
