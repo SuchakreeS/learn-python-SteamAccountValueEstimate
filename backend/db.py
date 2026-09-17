@@ -78,25 +78,6 @@ def save_library(steamid: str, games: list[dict]):
     cur.close()
     conn.close()
 
-def get_cached_genre(appid : int) -> dict | None:
-    conn = get_connection()
-    cur = conn.cursor()
-    cur.execute(
-    "SELECT * FROM game_genres WHERE appid=%s", (appid,)
-    )
-    row = cur.fetchone()
-    cur.close()
-    conn.close()
-
-    if row is None:
-        return None
-
-    return {
-        "genres": json.loads(row["genres"]),
-        "categories": json.loads(row["categories"])
-    }
-
-
 def save_genre(appid: int, genres: list[str], categories: list[str]) :
     conn = get_connection()
     cur = conn.cursor()
@@ -111,3 +92,24 @@ def save_genre(appid: int, genres: list[str], categories: list[str]) :
     conn.commit()
     cur.close()
     conn.close()
+
+def get_cached_genres(appids: list[int]) -> dict[int, dict]:
+    if not appids:
+        return {}
+
+    conn = get_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT * FROM game_genres WHERE appid = ANY(%s)", (appids,)
+    )
+    rows = cur.fetchall()
+    cur.close()
+    conn.close()
+
+    return{
+        row["appid"]: {
+            "genres": json.loads(row["genres"]),
+            "categories": json.loads(row["categories"])
+        }
+        for row in rows
+    }
