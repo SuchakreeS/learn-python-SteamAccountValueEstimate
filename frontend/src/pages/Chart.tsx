@@ -7,6 +7,7 @@ import type { GameGenre } from "../types/genre";
 import BottomNav from "../components/BottomNav";
 import Loading from "../components/Loading";
 import ViewToggle from "../components/ViewToggle";
+import TopGenreCard from "../components/TopGenreCard";
 
 const BAR_COLORS = ["var(--color-accent)", "var(--color-accent3)", "var(--color-accent2)"];
 
@@ -23,10 +24,12 @@ export default function Chart() {
     }
 
     const data = view === "genres" ? countGenres(games) : countCategories(games);
+    const topGenre = countGenres(games)[0]
 
     return (
         <div className="min-h-screen bg-bg px-6 pb-32 pt-10">
             <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
+                <TopGenreCard name={topGenre.name} count={topGenre.count} />
                 <ViewToggle view={view} onChange={setView} />
 
                 <div
